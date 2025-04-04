@@ -1,4 +1,4 @@
-import connectDB from "@/mongodb/db";
+import { connectdb } from "@/mongodb/db";
 import { Post } from "@/mongodb/models/post";
 import { NextResponse } from "next/server";
 
@@ -10,7 +10,7 @@ export async function POST(
   request: Request,
   { params }: { params: { post_id: string } }
 ) {
-  await connectDB();
+  await connectdb();
 
   const { userId }: UnlikePostRequestBody = await request.json();
   try {

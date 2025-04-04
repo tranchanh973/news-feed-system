@@ -1,4 +1,5 @@
 "use client";
+
 import { useUser } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import { useRef, useState } from "react";
@@ -43,7 +44,7 @@ function PostForm() {
       <form
         ref={ref}
         action={(formData: FormData) => {
-          // Handle form submission logic here
+          // Handle form submission with server action
           const promise = handlePostAction(formData);
 
           toast.promise(promise, {
@@ -77,7 +78,9 @@ function PostForm() {
             accept="image/*"
             hidden
             ref={fileInputRef}
-            onChange={handleImageChange}
+            onChange={(e) => {
+              handleImageChange(e);
+            }}
           />
 
           <button type="submit" hidden>

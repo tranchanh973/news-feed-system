@@ -1,4 +1,4 @@
-import connectDB from "@/mongodb/db";
+import { connectdb } from "@/mongodb/db";
 import { Followers } from "@/mongodb/models/followers";
 import { NextResponse } from "next/server";
 
@@ -8,7 +8,7 @@ export async function GET(request: Request) {
   const user_id = searchParams.get("user_id");
 
   try {
-    await connectDB();
+    await connectdb();
 
     if (!user_id) {
       return NextResponse.json(

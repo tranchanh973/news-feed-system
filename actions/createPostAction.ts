@@ -5,6 +5,8 @@ import { Post } from "@/mongodb/models/post";
 import { IUser } from "@/types/user";
 import { currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { connectdb } from "@/mongodb/db";
+import { put } from "@vercel/blob";
 
 export default async function createPostAction(formData: FormData) {
   const user = await currentUser();
@@ -15,13 +17,13 @@ export default async function createPostAction(formData: FormData) {
 
   const postInput = formData.get("postInput") as string;
   const image = formData.get("image") as File;
-  let image_url: string | undefined;
+  let imageUrl: string | undefined;
 
   if (!postInput) {
     throw new Error("Post input is required");
   }
 
-  //define user
+  // Define user
   const userDB: IUser = {
     userId: user.id,
     userImage: user.imageUrl,
@@ -30,22 +32,30 @@ export default async function createPostAction(formData: FormData) {
   };
 
   try {
-    if (image.size > 0) {
-      //1. upload image if there is one
-      //2. create post in database with image
-      const body: AddPostRequestBody = {
-        user: userDB,
-        text: postInput,
-        imageUrl: image_url,
-      };
-    } else {
-      //1. create post in database without image
-      const body: AddPostRequestBody = {
-        user: userDB,
-        text: postInput,
-      };
-      await Post.create(body);
+    // Kết nối đến MongoDB
+    await connectdb();
+
+    // Nếu có ảnh, chuyển đổi thành Buffer
+    if (image && image.size > 0) {
+      const buffer = Buffer.from(await image.arrayBuffer());
+
+      // Tải ảnh lên Blob Storage
+      const result = await put(`posts/${Date.now()}-${image.name}`, buffer, {
+        contentType: image.type,
+        access: "public", // or "private" based on your requirements
+      });
+
+      imageUrl = result.url;
     }
+
+    // Tạo bài viết trong cơ sở dữ liệu
+    const body = {
+      user: userDB,
+      text: postInput,
+      ...(imageUrl && { imageUrl }),
+    };
+
+    await Post.create(body);
 
     // Revalidate the path to ensure the post appears on the homepage
     await revalidatePath("/");

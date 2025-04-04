@@ -1,4 +1,4 @@
-import connectDB from "@/mongodb/db";
+import { connectdb } from "@/mongodb/db";
 import { IPostBase, Post } from "@/mongodb/models/post";
 import { IUser } from "@/types/user";
 import { auth } from "@clerk/nextjs/server";
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   auth().protect(); //protect the route
 
   try {
-    connectDB(); //connect to the database
+    connectdb(); //connect to the database
 
     const { user, text, imageUrl }: AddPostRequestBody = await request.json(); //get the data from the request body
 
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    await connectDB(); //connect to the database
+    await connectdb(); //connect to the database
 
     const posts = await Post.getAllPosts(); //fetch all posts
     return NextResponse.json({ posts }); //return posts as json

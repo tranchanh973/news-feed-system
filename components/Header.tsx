@@ -36,18 +36,12 @@ function Header() {
           <HomeIcon className="h-5" />
           <p>Home</p>
         </Link>
-        <Link href="/" className="icon hidden md:flex">
-          <UsersIcon className="h-5" />
-          <p>Network</p>
-        </Link>
-        <Link href="/" className="icon hidden md:flex">
-          <Briefcase className="h-5" />
-          <p>Jobs</p>
-        </Link>
+
         <Link href="/" className="icon">
           <MessagesSquare className="h-5" />
-          <p>Messaging</p>
+          <p>Message</p>
         </Link>
+
         {/* User Button  if signed in*/}
         <SignedIn>
           <UserButton />

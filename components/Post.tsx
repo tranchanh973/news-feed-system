@@ -4,7 +4,6 @@ import { Trash2 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { IPostDocument } from "@/mongodb/models/post";
 import PostOptions from "./PostOptions";
-import Image from "next/image";
 import deletePostAction from "@/actions/deletePostAction";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "./ui/button";
@@ -16,6 +15,7 @@ function Post({ post }: { post: IPostDocument }) {
   const { user } = useUser();
 
   const isAuthor = user?.id === post.user.userId;
+
   return (
     <div className="bg-white rounded-md border">
       <div className="p-4 flex space-x-2">
@@ -71,11 +71,9 @@ function Post({ post }: { post: IPostDocument }) {
 
         {/* If image uploaded put it here... */}
         {post.imageUrl && (
-          <Image
+          <img
             src={post.imageUrl}
             alt="Post Image"
-            width={500}
-            height={500}
             className="w-full mx-auto"
           />
         )}

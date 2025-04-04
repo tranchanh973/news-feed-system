@@ -1,4 +1,4 @@
-import connectDB from "@/mongodb/db";
+import { connectdb } from "@/mongodb/db";
 import { Post } from "@/mongodb/models/post";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
@@ -7,7 +7,7 @@ export async function GET(
   request: Request,
   { params }: { params: { post_id: string } }
 ) {
-  await connectDB();
+  await connectdb();
 
   try {
     const post = await Post.findById(params.post_id);
@@ -36,7 +36,7 @@ export async function DELETE(
 
   // const user = await currentUser();
 
-  await connectDB();
+  await connectdb();
 
   const { userId }: DeletePostRequestBody = await request.json();
 

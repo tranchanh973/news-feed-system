@@ -1,4 +1,4 @@
-import connectDB from "@/mongodb/db";
+import { connectdb } from "@/mongodb/db";
 import { ICommentBase } from "@/mongodb/models/comment";
 import { Post } from "@/mongodb/models/post";
 import { IUser } from "@/types/user";
@@ -9,7 +9,7 @@ export async function GET(
   { params }: { params: { post_id: string } }
 ) {
   try {
-    await connectDB();
+    await connectdb();
 
     const post = await Post.findById(params.post_id);
 
@@ -35,7 +35,7 @@ export async function POST(
   request: Request,
   { params }: { params: { post_id: string } }
 ) {
-  await connectDB();
+  await connectdb();
 
   const { user, text }: AddCommentRequestBody = await request.json();
 

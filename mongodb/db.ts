@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-// Lấy connection string từ biến môi trường
 const connectionString = process.env.MONGO_DB_URI;
 
 if (!connectionString) {
@@ -9,7 +8,6 @@ if (!connectionString) {
   );
 }
 
-// Bật chế độ debug của Mongoose để theo dõi các truy vấn
 mongoose.set("debug", true);
 
 const connectdb = async () => {
@@ -18,17 +16,15 @@ const connectdb = async () => {
     return;
   }
   try {
-    const connectionInstance = await mongoose.connect(connectionString, {
-      // useNewUrlParser: true,
-      // useUnifiedTopology: true,
-    });
+    const connectionInstance = await mongoose.connect(connectionString);
+
     console.log(
       `\nMongoDB connected successfully! DB HOST: ${connectionInstance.connection.host}`
     );
   } catch (err) {
     console.error("MongoDB connection error: ", err);
-    process.exit(1); // Thoát ứng dụng nếu kết nối thất bại
+    process.exit(1);
   }
 };
 
-export default connectdb;
+export { connectdb };
