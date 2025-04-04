@@ -5,22 +5,21 @@ import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import { Button } from "./ui/button";
 import { IPostDocument } from "@/mongodb/models/post";
 
-// async function UserInformation({ posts }: { posts: IPostDocument[] }) {
-async function UserInformation() {
+async function UserInformation({ posts }: { posts: IPostDocument[] }) {
   const user = await currentUser();
 
   const firstName = user?.firstName;
   const lastName = user?.lastName;
   const imageUrl = user?.imageUrl;
 
-  //   const userPosts =
-  //     posts?.filter((post) => post.user.userId === user?.id) || [];
-  //   const userComments =
-  //     posts?.flatMap(
-  //       (post) =>
-  //         post?.comments?.filter((comment) => comment.user.userId === user?.id) ||
-  //         []
-  //     ) || [];
+  const userPosts =
+    posts?.filter((post) => post.user.userId === user?.id) || [];
+  const userComments =
+    posts?.flatMap(
+      (post) =>
+        post?.comments?.filter((comment) => comment.user.userId === user?.id) ||
+        []
+    ) || [];
 
   return (
     <div className="flex flex-col justify-center items-center bg-white mr-6 rounded-lg border py-4">
@@ -48,8 +47,8 @@ async function UserInformation() {
       </SignedIn>
       <SignedOut>
         <div className="text-center space-x-2">
-          <p className="font-semibold">You are not signed in</p>
-          <Button asChild className="bg-[#0B63C4] text-white">
+          <p className="font-semibold my-2">You are not signed in</p>
+          <Button asChild className="bg-[#0B63C4] text-white !ml-0">
             <SignInButton>Sign in</SignInButton>
           </Button>
         </div>
@@ -58,14 +57,14 @@ async function UserInformation() {
         <hr className="w-full border-gray-200 my-5" />
         <div className="flex justify-between w-full px-4 text-sm">
           <p className="flex justify-between w-full px-4 text-sm">Posts</p>
-          {/* <p className="text-blue-400">{userPosts.length}</p> */}
-          <p className="text-blue-400">0</p>
+          <p className="text-blue-400">{userPosts.length}</p>
+          {/* <p className="text-blue-400">0</p> */}
         </div>
 
         <div className="flex justify-between w-full px-4 text-sm">
           <p className="flex justify-between w-full px-4 text-sm">Comments</p>
-          {/* <p className="text-blue-400">{userComments.length}</p> */}
-          <p className="text-blue-400">0</p>
+          <p className="text-blue-400">{userComments.length}</p>
+          {/* <p className="text-blue-400">0</p> */}
         </div>
       </SignedIn>
     </div>

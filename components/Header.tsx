@@ -54,7 +54,7 @@ function Header() {
         </SignedIn>
         {/* Sign in Button if not signed in*/}
         <SignedOut>
-          <Button asChild variant="secondary">
+          <Button asChild className="bg-[#0B63C4] text-white">
             <SignInButton />
           </Button>
         </SignedOut>

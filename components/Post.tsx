@@ -31,17 +31,16 @@ function Post({ post }: { post: IPostDocument }) {
 
         <div className="flex justify-between flex-1">
           <div>
-            <p className="font-semibold">
+            <div className="font-semibold">
               {post.user.firstName} {post.user.lastName}{" "}
               {isAuthor && (
                 <Badge className="ml-2" variant="secondary">
                   Author
                 </Badge>
               )}
-            </p>
+            </div>
             <p className="text-xs text-gray-400">
-              @{post.user.firstName}
-              {post.user.firstName}-{post.user.userId.toString().slice(-4)}
+              @{post.user.firstName}-{post.user.userId.toString().slice(-4)}
             </p>
 
             <p className="text-xs text-gray-400">
