@@ -12,6 +12,19 @@ export default async function Home() {
   await connectdb();
   const posts = await Post.getAllPosts();
 
+  const recentUsers = [
+    {
+      name: "John Doe",
+      image: "https://via.placeholder.com/150",
+      lastActive: new Date(Date.now() - 5 * 60 * 1000), // 5 phút trước
+    },
+    {
+      name: "Jane Smith",
+      image: "https://via.placeholder.com/150",
+      lastActive: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 giờ trước
+    },
+  ];
+
   return (
     <div className="grid grid-cols-8 mt-5 sm:px-5">
       {/* Section 1: User Information */}
@@ -29,7 +42,7 @@ export default async function Home() {
 
       {/* Section 3: Widget */}
       <section className="hidden xl:inline justify-center col-span-2 ml-6">
-        <Widget />
+        <Widget recentUsers={recentUsers} />
       </section>
     </div>
   );
