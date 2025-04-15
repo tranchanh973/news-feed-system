@@ -13,47 +13,32 @@ function Widget() {
   useEffect(() => {
     if (!userId) return;
 
-    const ws = new WebSocket("ws://localhost:3000/api/websocket");
-
-    ws.onopen = () => {
-      console.log("WebSocket connection established");
-      // Gửi trạng thái "đang hoạt động" khi kết nối WebSocket mở
-      ws.send(
-        JSON.stringify({
-          userId,
-          isActive: true,
-        })
-      );
+    // Gửi thông tin người dùng khi truy cập
+    const saveRecentUser = async () => {
+      try {
+        await fetch("/api/recentUsers", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId,
+            lastActive: new Date().toISOString(),
+          }),
+        });
+      } catch (error) {
+        console.error("Error saving recent user:", error);
+      }
     };
 
-    ws.onmessage = (event) => {
-      console.log("Message from server:", event.data);
-    };
+    saveRecentUser();
 
-    ws.onerror = (error) => {
-      console.error("WebSocket error:", error);
-    };
+    // Gửi heartbeat định kỳ để cập nhật lastActive
+    const interval = setInterval(() => {
+      saveRecentUser();
+    }, 15000); // 15 giây
 
-    ws.onclose = () => {
-      console.log("WebSocket connection closed");
-    };
-
-    // Gửi trạng thái "không hoạt động" khi người dùng thoát
-    const handleBeforeUnload = () => {
-      ws.send(
-        JSON.stringify({
-          userId,
-          isActive: false,
-        })
-      );
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-      ws.close(); // Đóng kết nối WebSocket khi component bị unmount
-    };
+    return () => clearInterval(interval); // Xóa interval khi component bị unmount
   }, [userId]);
 
   useEffect(() => {
@@ -72,6 +57,13 @@ function Widget() {
     };
 
     fetchRecentUsers();
+
+    // Polling: Gọi API định kỳ để cập nhật danh sách người dùng
+    const interval = setInterval(() => {
+      fetchRecentUsers();
+    }, 5000); // 5 giây
+
+    return () => clearInterval(interval); // Xóa interval khi component bị unmount
   }, []);
 
   return (
@@ -105,16 +97,19 @@ function Widget() {
               <div>
                 <p className="font-medium flex items-center">
                   {user.name}
-                  {user.isActive && (
+                  {/* {user.isActive && (
                     <span className="ml-2 w-2 h-2 bg-green-500 rounded-full"></span>
-                  )}
+                  )} */}
                 </p>
-                {!user.isActive && (
+                {/* {!user.isActive && (
                   <p className="text-sm text-gray-500">
                     Last active:{" "}
                     <ReactTimeAgo date={new Date(user.lastActive)} />
                   </p>
-                )}
+                )} */}
+                <div suppressHydrationWarning className="text-sm text-gray-500">
+                  Last active: <ReactTimeAgo date={new Date(user.lastActive)} />
+                </div>
               </div>
             </li>
           ))}
