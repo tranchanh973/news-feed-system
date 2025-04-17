@@ -13,7 +13,6 @@ function CommentForm({ postId }: { postId: string }) {
   const createCommentActionWithPostId = createCommentAction.bind(null, postId);
 
   const handleCommentAction = async (formData: FormData): Promise<void> => {
-    const formDataCopy = formData;
     ref.current?.reset();
 
     try {
@@ -21,18 +20,28 @@ function CommentForm({ postId }: { postId: string }) {
         throw new Error("User not authenticated");
       }
 
-      await createCommentActionWithPostId(formDataCopy);
+      await createCommentActionWithPostId(formData);
     } catch (error) {
       console.error(`Error creating comment: ${error}`);
-
-      // Display toast
+      toast.error("Error creating comment");
     }
   };
 
   return (
     <form
       ref={ref}
-      action={(formData) => {
+      onSubmit={async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(ref.current!);
+        const commentInput = formData.get("commentInput") as string;
+
+        //Check input empty before calling toast.promise
+        if (!commentInput || commentInput.trim() === "") {
+          toast.error("Comment cannot be empty!");
+          return;
+        }
+
         const promise = handleCommentAction(formData);
         toast.promise(promise, {
           loading: "Posting comment...",
