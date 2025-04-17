@@ -16,7 +16,7 @@ function Header() {
     <div className="flex items-center p-2 max-w-6xl mx-auto">
       <Image
         className="rounded-lg"
-        src="https://imgur.com/jHPla6y.png"
+        src="/logo.jpg"
         width={40}
         height={40}
         alt="logo"

@@ -100,17 +100,19 @@ function PostOptions({
       </div>
 
       <div className="flex p-2 justify-between px-2 border-t">
-        <Button
-          variant="ghost"
-          className="postButton"
-          onClick={likeOrUnlikePost}
-        >
-          {/* If user has liked the post, show filled thumbs up icon */}
-          <ThumbsUpIcon
-            className={cn("mr-1", liked && "text-[#4881c2] fill-[#4881c2]")}
-          />
-          Like
-        </Button>
+        {user?.id && (
+          <Button
+            variant="ghost"
+            className="postButton"
+            onClick={likeOrUnlikePost}
+          >
+            {/* If user has liked the post, show filled thumbs up icon */}
+            <ThumbsUpIcon
+              className={cn("mr-1", liked && "text-[#4881c2] fill-[#4881c2]")}
+            />
+            Like
+          </Button>
+        )}
 
         <Button
           variant="ghost"

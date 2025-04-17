@@ -17,11 +17,13 @@ export default async function Home() {
       name: "John Doe",
       image: "https://via.placeholder.com/150",
       lastActive: new Date(Date.now() - 5 * 60 * 1000), // 5 phút trước
+      isActive: true,
     },
     {
       name: "Jane Smith",
       image: "https://via.placeholder.com/150",
       lastActive: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 giờ trước
+      isActive: true,
     },
   ];
 
@@ -42,7 +44,7 @@ export default async function Home() {
 
       {/* Section 3: Widget */}
       <section className="hidden xl:inline justify-center col-span-2 ml-6">
-        <Widget recentUsers={recentUsers} />
+        <Widget />
       </section>
     </div>
   );
